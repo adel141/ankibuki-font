@@ -69,6 +69,8 @@ https://openfontlicense.org</string>
   <string>Ankibuki</string>
   <key>openTypeNamePreferredSubfamilyName</key>
   <string>Regular</string>
+  <key>openTypeNameSampleText</key>
+  <string>আঁকিবুঁকি বাংলা অক্ষরের মজার গল্প</string>
   <key>openTypeNameUniqueID</key>
   <string>Version 1.000 2026;Ankibuki-Regular;2026;</string>
   <key>openTypeNameVersion</key>
