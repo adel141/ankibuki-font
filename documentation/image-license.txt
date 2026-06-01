@@ -1,0 +1,5 @@
+The images in this directory are part of the Ankibuki font project.
+
+Copyright 2026 The Ankibuki Project Authors (https://github.com/adel141/ankibuki-font)
+
+They are licensed under the SIL Open Font License, Version 1.1.
