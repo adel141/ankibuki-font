@@ -8,6 +8,7 @@
       content="Ankibuki is a playful Bangla scribble display font for posters, books, graphics, event titles, and creative branding."
     >
     <title>আঁকিবুঁকি | Ankibuki Font Specimen</title>
+    <link rel="icon" type="image/png" href="assets/favicon/favicon.png">
     <link rel="preload" href="assets/fonts/Ankibuki-Regular.woff2" as="font" type="font/woff2" crossorigin>
     <script>
       (function () {
@@ -126,16 +127,67 @@
           <div class="tester-top">
             <div>
               <p class="section-kicker">Live type tester</p>
-              <h2 id="tester-heading">Write with Ankibuki</h2>
+              <h2 id="tester-heading">Create a quick type poster</h2>
             </div>
-            <label class="size-control" for="font-size">
-              <span>Size <output id="size-output" for="font-size">88px</output></span>
-              <input id="font-size" type="range" min="44" max="150" value="88">
-            </label>
           </div>
-          <label class="text-input-label" for="tester-input">Your text</label>
-          <textarea id="tester-input" placeholder="এখানে লিখুন..." rows="3"></textarea>
-          <div id="preview-text" class="tester-preview ankibuki-text" aria-live="polite">আঁকিবুঁকি বাংলা ফন্ট</div>
+          <div class="editor-layout">
+            <div class="editor-panel">
+              <label class="text-input-label" for="tester-input">Your text</label>
+              <textarea id="tester-input" placeholder="এখানে লিখুন..." rows="4"></textarea>
+
+              <div class="editor-controls" aria-label="Type editor controls">
+                <label class="editor-control" for="font-size">
+                  <span>Size <output id="size-output" for="font-size">88px</output></span>
+                  <input id="font-size" type="range" min="36" max="170" value="88">
+                </label>
+                <label class="editor-control" for="line-height">
+                  <span>Line space <output id="line-height-output" for="line-height">1.15</output></span>
+                  <input id="line-height" type="range" min="0.9" max="1.8" step="0.05" value="1.15">
+                </label>
+                <label class="editor-control" for="editor-padding">
+                  <span>Padding <output id="padding-output" for="editor-padding">44px</output></span>
+                  <input id="editor-padding" type="range" min="16" max="96" value="44">
+                </label>
+                <label class="editor-control" for="image-opacity">
+                  <span>Image opacity <output id="image-opacity-output" for="image-opacity">42%</output></span>
+                  <input id="image-opacity" type="range" min="0" max="1" step="0.05" value="0.42">
+                </label>
+                <label class="editor-control color-control" for="text-color">
+                  <span>Text color</span>
+                  <input id="text-color" type="color" value="#171717">
+                </label>
+                <label class="editor-control color-control" for="background-color">
+                  <span>Background</span>
+                  <input id="background-color" type="color" value="#fffaf0">
+                </label>
+              </div>
+
+              <fieldset class="align-control">
+                <legend>Align</legend>
+                <button type="button" data-align="left">Left</button>
+                <button type="button" data-align="center" aria-pressed="true">Center</button>
+                <button type="button" data-align="right">Right</button>
+              </fieldset>
+
+              <label class="image-picker" for="background-image-input">
+                <span>Add background picture</span>
+                <input id="background-image-input" type="file" accept="image/*">
+              </label>
+
+              <div class="editor-actions">
+                <button id="clear-image" type="button">Clear Picture</button>
+                <button id="download-png" type="button">Download PNG</button>
+                <button id="download-txt" type="button">Download TXT</button>
+              </div>
+            </div>
+
+            <div class="preview-wrap">
+              <div id="preview-artboard" class="tester-preview" aria-live="polite">
+                <img id="preview-image" class="preview-image" alt="">
+                <div id="preview-text" class="preview-text ankibuki-text">আঁকিবুঁকি বাংলা ফন্ট</div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

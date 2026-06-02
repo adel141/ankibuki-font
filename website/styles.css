@@ -520,13 +520,33 @@ h3 {
   margin-bottom: 28px;
 }
 
-.size-control {
-  min-width: 260px;
+.editor-layout {
   display: grid;
-  gap: 12px;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(360px, 1.1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.editor-panel {
+  min-width: 0;
+}
+
+.editor-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 22px;
+}
+
+.editor-control {
+  display: grid;
+  gap: 10px;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
   font-weight: 900;
 }
 
+.editor-control span,
 .size-control span {
   display: flex;
   justify-content: space-between;
@@ -535,9 +555,31 @@ h3 {
   font-size: 0.9rem;
 }
 
+.size-control {
+  min-width: 260px;
+  display: grid;
+  gap: 12px;
+  font-weight: 900;
+}
+
 input[type="range"] {
   width: 100%;
   accent-color: var(--yellow-deep);
+}
+
+.color-control {
+  grid-template-columns: 1fr auto;
+  align-items: center;
+}
+
+input[type="color"] {
+  width: 52px;
+  height: 40px;
+  padding: 3px;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  background: var(--paper-card);
+  cursor: pointer;
 }
 
 .text-input-label {
@@ -567,20 +609,113 @@ textarea:focus {
   border-color: var(--yellow-deep);
 }
 
-.tester-preview {
-  min-height: 236px;
-  margin-top: 28px;
-  padding: 28px;
+.align-control {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 22px 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.align-control legend {
+  width: 100%;
+  margin-bottom: 4px;
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.align-control button,
+.editor-actions button,
+.image-picker {
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 2px solid var(--ink);
+  border-radius: 2px 8px 3px 8px / 8px 3px 8px 2px;
+  background: var(--paper-card);
+  color: var(--ink);
+  box-shadow: 2px 2px 0 var(--shadow);
+  font-size: 0.88rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.align-control button[aria-pressed="true"],
+.editor-actions button:nth-child(2) {
+  background: var(--yellow);
+  color: var(--on-yellow);
+}
+
+.image-picker {
   display: grid;
-  place-items: center;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.image-picker input {
+  max-width: 100%;
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+}
+
+.editor-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.preview-wrap {
+  min-width: 0;
+}
+
+.tester-preview {
+  --preview-font-size: 88px;
+  --preview-line-height: 1.15;
+  --preview-padding: 44px;
+  --preview-text-color: #171717;
+  --preview-bg-color: #fffaf0;
+  --preview-align: center;
+  --preview-image-opacity: 0.42;
+  min-height: 360px;
+  aspect-ratio: 16 / 10;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: var(--preview-padding);
   border: 2px dashed var(--card-inner);
   border-radius: var(--radius);
-  background:
-    linear-gradient(var(--card-rule) 1px, transparent 1px),
-    var(--preview-paper);
-  background-size: 100% 34px, auto;
-  text-align: center;
-  line-height: 1.14;
+  background: var(--preview-bg-color);
+}
+
+.preview-image {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: var(--preview-image-opacity);
+}
+
+.preview-image.has-image {
+  display: block;
+}
+
+.preview-text {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  color: var(--preview-text-color);
+  font-size: var(--preview-font-size);
+  line-height: var(--preview-line-height);
+  text-align: var(--preview-align);
+  white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
 
@@ -854,6 +989,7 @@ code {
   .about-section,
   .embed-section,
   .glyph-panels,
+  .editor-layout,
   .tester-top,
   .poster-grid {
     grid-template-columns: 1fr;
@@ -988,13 +1124,17 @@ code {
     padding: 20px;
   }
 
+  .editor-controls {
+    grid-template-columns: 1fr;
+  }
+
   .size-control {
     min-width: 0;
   }
 
   .tester-preview {
-    min-height: 180px;
-    padding: 18px;
+    min-height: 260px;
+    aspect-ratio: 1 / 1;
   }
 
   .sample-band {
