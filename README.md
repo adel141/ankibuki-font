@@ -5,6 +5,7 @@
 
 
 Ankibuki is a playful Bangla scribble display font inspired by doodles, sketchbooks, classroom notes, and expressive handwriting. It is designed for posters, children's books, social media graphics, event titles, and creative Bangla branding.
+</br>
 <img width="500" height="610" alt="image" src="https://github.com/user-attachments/assets/e5a64616-7248-414e-9a45-fb359bf0675f" />
 
 
