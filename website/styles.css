@@ -988,7 +988,7 @@ dd {
 
 .poster-card {
   min-height: 460px;
-  padding: 28px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -1029,7 +1029,7 @@ dd {
 
 .poster-card span {
   align-self: start;
-  padding: 2px 10px;
+  padding: 8px 10px;
   border: 2px solid currentColor;
   background: rgba(255, 255, 255, 0.12);
 }
@@ -1336,7 +1336,6 @@ code {
   }
 
   .tester-preview {
-    min-height: 280px;
     aspect-ratio: var(--preview-width) / var(--preview-height);
   }
 
