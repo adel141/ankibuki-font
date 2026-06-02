@@ -11,6 +11,7 @@
   const paddingOutput = document.getElementById("padding-output");
   const textColor = document.getElementById("text-color");
   const backgroundColor = document.getElementById("background-color");
+  const transparentBackground = document.getElementById("transparent-background");
   const imageInput = document.getElementById("background-image-input");
   const imageOpacity = document.getElementById("image-opacity");
   const imageOpacityOutput = document.getElementById("image-opacity-output");
@@ -85,7 +86,10 @@
 
   function updateColors() {
     setPreviewVar("--preview-text-color", textColor.value);
-    setPreviewVar("--preview-bg-color", backgroundColor.value);
+    const isTransparent = transparentBackground.checked;
+    setPreviewVar("--preview-bg-color", isTransparent ? "transparent" : backgroundColor.value);
+    artboard.classList.toggle("is-transparent", isTransparent);
+    backgroundColor.disabled = isTransparent;
   }
 
   function updateImageOpacity() {
@@ -183,8 +187,10 @@
 
     canvas.width = width;
     canvas.height = height;
-    context.fillStyle = backgroundColor.value;
-    context.fillRect(0, 0, width, height);
+    if (!transparentBackground.checked) {
+      context.fillStyle = backgroundColor.value;
+      context.fillRect(0, 0, width, height);
+    }
 
     if (uploadedImage && previewImage.complete && previewImage.naturalWidth) {
       drawCoverImage(context, previewImage, width, height, Number(imageOpacity.value));
@@ -219,7 +225,7 @@
       "Font size: " + slider.value + "px",
       "Line space: " + Number(lineHeight.value).toFixed(2),
       "Text color: " + textColor.value,
-      "Background: " + backgroundColor.value,
+      "Background: " + (transparentBackground.checked ? "transparent" : backgroundColor.value),
       "Alignment: " + currentAlign
     ];
 
@@ -232,6 +238,7 @@
   paddingInput.addEventListener("input", updatePadding);
   textColor.addEventListener("input", updateColors);
   backgroundColor.addEventListener("input", updateColors);
+  transparentBackground.addEventListener("change", updateColors);
   imageOpacity.addEventListener("input", updateImageOpacity);
   clearImage.addEventListener("click", function () {
     imageInput.value = "";
