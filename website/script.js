@@ -22,6 +22,7 @@
   const copyButton = document.getElementById("copy-css");
   const embedCode = document.getElementById("embed-code");
   const themeToggles = Array.from(document.querySelectorAll("[data-theme-toggle]"));
+  const backToTop = document.getElementById("back-to-top");
   const defaultText = "আঁকিবুঁকি বাংলা ফন্ট";
 
   let uploadedImage = null;
@@ -266,6 +267,9 @@
       const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
       setTheme(nextTheme);
     });
+  });
+  backToTop.addEventListener("click", function () {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
   updatePreview();
