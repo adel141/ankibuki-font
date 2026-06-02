@@ -3,6 +3,7 @@
   const preview = document.getElementById("preview-text");
   const artboard = document.getElementById("preview-artboard");
   const previewImage = document.getElementById("preview-image");
+  const textFrame = document.getElementById("text-frame");
   const pageSize = document.getElementById("page-size");
   const canvasWidth = document.getElementById("canvas-width");
   const canvasWidthOutput = document.getElementById("canvas-width-output");
@@ -12,12 +13,6 @@
   const sizeOutput = document.getElementById("size-output");
   const lineHeight = document.getElementById("line-height");
   const lineHeightOutput = document.getElementById("line-height-output");
-  const textX = document.getElementById("text-x");
-  const textXOutput = document.getElementById("text-x-output");
-  const textY = document.getElementById("text-y");
-  const textYOutput = document.getElementById("text-y-output");
-  const textWidth = document.getElementById("text-width");
-  const textWidthOutput = document.getElementById("text-width-output");
   const textRotate = document.getElementById("text-rotate");
   const textRotateOutput = document.getElementById("text-rotate-output");
   const paddingInput = document.getElementById("editor-padding");
@@ -49,6 +44,8 @@
 
   let uploadedImage = null;
   let currentAlign = "center";
+  let frameState = { x: 50, y: 50, width: 92 };
+  let frameDrag = null;
 
   function saveTheme(theme) {
     try {
@@ -83,6 +80,10 @@
 
   function setPreviewVar(name, value) {
     artboard.style.setProperty(name, value);
+  }
+
+  function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
   }
 
   function pageSizeParts(value) {
@@ -130,17 +131,18 @@
     lineHeightOutput.textContent = value;
   }
 
-  function updateTextPosition() {
-    setPreviewVar("--preview-text-x", textX.value + "%");
-    setPreviewVar("--preview-text-y", textY.value + "%");
-    textXOutput.textContent = textX.value + "%";
-    textYOutput.textContent = textY.value + "%";
+  function updateFrame() {
+    frameState.width = clamp(frameState.width, 24, 100);
+    const halfWidth = frameState.width / 2;
+    frameState.x = clamp(frameState.x, halfWidth, 100 - halfWidth);
+    frameState.y = clamp(frameState.y, 5, 95);
+    setPreviewVar("--preview-text-x", frameState.x + "%");
+    setPreviewVar("--preview-text-y", frameState.y + "%");
+    setPreviewVar("--preview-text-width", frameState.width + "%");
   }
 
-  function updateTextBox() {
-    setPreviewVar("--preview-text-width", textWidth.value + "%");
+  function updateRotation() {
     setPreviewVar("--preview-rotate", textRotate.value + "deg");
-    textWidthOutput.textContent = textWidth.value + "%";
     textRotateOutput.textContent = textRotate.value + "deg";
   }
 
@@ -201,11 +203,9 @@
     pageSize.value = "1600x1000";
     canvasWidth.value = "1600";
     canvasHeight.value = "1000";
-    slider.value = "88";
+    slider.value = "64";
     lineHeight.value = "1.15";
-    textX.value = "50";
-    textY.value = "50";
-    textWidth.value = "100";
+    frameState = { x: 50, y: 50, width: 92 };
     textRotate.value = "0";
     paddingInput.value = "44";
     textOpacity.value = "1";
@@ -222,8 +222,8 @@
     updateCanvasSize(false);
     updateSize();
     updateLineHeight();
-    updateTextPosition();
-    updateTextBox();
+    updateFrame();
+    updateRotation();
     updatePadding();
     updateTextEffects();
     updateColors();
@@ -312,9 +312,9 @@
     const padding = Number(paddingInput.value) * scale;
     const fontSize = Number(slider.value) * scale;
     const lineGap = Number(lineHeight.value);
-    const textBoxWidth = Math.min(width - padding * 2, width * (Number(textWidth.value) / 100));
-    const centerX = width * (Number(textX.value) / 100);
-    const centerY = height * (Number(textY.value) / 100);
+    const textBoxWidth = Math.min(width - padding * 2, width * (frameState.width / 100));
+    const centerX = width * (frameState.x / 100);
+    const centerY = height * (frameState.y / 100);
     const rotation = Number(textRotate.value) * Math.PI / 180;
     const strokeWidth = Number(outlineWidth.value) * scale;
     const context = canvas.getContext("2d");
@@ -377,8 +377,8 @@
       "Page size: " + canvasWidth.value + " x " + canvasHeight.value + "px",
       "Font size: " + slider.value + "px",
       "Line space: " + Number(lineHeight.value).toFixed(2),
-      "Text position: " + textX.value + "%, " + textY.value + "%",
-      "Text box: " + textWidth.value + "%",
+      "Text position: " + Math.round(frameState.x) + "%, " + Math.round(frameState.y) + "%",
+      "Text box: " + Math.round(frameState.width) + "%",
       "Rotation: " + textRotate.value + "deg",
       "Text opacity: " + Math.round(Number(textOpacity.value) * 100) + "%",
       "Text color: " + textColor.value,
@@ -402,10 +402,7 @@
   });
   slider.addEventListener("input", updateSize);
   lineHeight.addEventListener("input", updateLineHeight);
-  textX.addEventListener("input", updateTextPosition);
-  textY.addEventListener("input", updateTextPosition);
-  textWidth.addEventListener("input", updateTextBox);
-  textRotate.addEventListener("input", updateTextBox);
+  textRotate.addEventListener("input", updateRotation);
   paddingInput.addEventListener("input", updatePadding);
   textOpacity.addEventListener("input", updateTextEffects);
   textColor.addEventListener("input", updateColors);
@@ -434,6 +431,80 @@
     });
     reader.readAsDataURL(file);
   });
+  textFrame.addEventListener("pointerdown", function (event) {
+    if (event.button !== undefined && event.button !== 0) return;
+
+    const rect = artboard.getBoundingClientRect();
+    frameDrag = {
+      mode: event.target.classList.contains("resize-handle") ? "resize" : "move",
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      startFrame: { x: frameState.x, y: frameState.y, width: frameState.width },
+      rect
+    };
+    textFrame.classList.add("is-editing");
+    try {
+      textFrame.setPointerCapture(event.pointerId);
+    } catch (error) {
+      // Pointer capture can fail for synthetic events; direct editing still works.
+    }
+    event.preventDefault();
+  });
+  textFrame.addEventListener("pointermove", function (event) {
+    if (!frameDrag || frameDrag.pointerId !== event.pointerId) return;
+
+    const dx = (event.clientX - frameDrag.startX) / frameDrag.rect.width * 100;
+    const dy = (event.clientY - frameDrag.startY) / frameDrag.rect.height * 100;
+    if (frameDrag.mode === "resize") {
+      frameState.width = frameDrag.startFrame.width + dx * 2;
+    } else {
+      frameState.x = frameDrag.startFrame.x + dx;
+      frameState.y = frameDrag.startFrame.y + dy;
+    }
+    updateFrame();
+  });
+  textFrame.addEventListener("pointerup", function (event) {
+    if (!frameDrag || frameDrag.pointerId !== event.pointerId) return;
+
+    frameDrag = null;
+    textFrame.classList.remove("is-editing");
+    if (textFrame.hasPointerCapture && textFrame.hasPointerCapture(event.pointerId)) {
+      textFrame.releasePointerCapture(event.pointerId);
+    }
+  });
+  textFrame.addEventListener("pointercancel", function (event) {
+    if (!frameDrag || frameDrag.pointerId !== event.pointerId) return;
+
+    frameDrag = null;
+    textFrame.classList.remove("is-editing");
+  });
+  textFrame.addEventListener("keydown", function (event) {
+    const moveStep = event.shiftKey ? 5 : 1;
+    const resizeStep = event.shiftKey ? 8 : 3;
+    let handled = true;
+
+    if (event.key === "ArrowLeft") {
+      frameState.x -= moveStep;
+    } else if (event.key === "ArrowRight") {
+      frameState.x += moveStep;
+    } else if (event.key === "ArrowUp") {
+      frameState.y -= moveStep;
+    } else if (event.key === "ArrowDown") {
+      frameState.y += moveStep;
+    } else if (event.key === "-" || event.key === "_") {
+      frameState.width -= resizeStep;
+    } else if (event.key === "=" || event.key === "+") {
+      frameState.width += resizeStep;
+    } else {
+      handled = false;
+    }
+
+    if (handled) {
+      updateFrame();
+      event.preventDefault();
+    }
+  });
   alignButtons.forEach(function (button) {
     button.addEventListener("click", function () {
       updateAlign(button.dataset.align || "center");
@@ -453,8 +524,8 @@
   updateCanvasSize(false);
   updateSize();
   updateLineHeight();
-  updateTextPosition();
-  updateTextBox();
+  updateFrame();
+  updateRotation();
   updatePadding();
   updateTextEffects();
   updateColors();
