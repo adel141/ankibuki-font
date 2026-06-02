@@ -132,21 +132,68 @@
               <textarea id="tester-input" placeholder="এখানে লিখুন..." rows="4"></textarea>
 
               <div class="editor-controls" aria-label="Type editor controls">
+                <label class="editor-control select-control control-wide" for="page-size">
+                  <span>Page preset</span>
+                  <select id="page-size">
+                    <option value="1600x1000">Landscape 16:10</option>
+                    <option value="1200x1200">Square post</option>
+                    <option value="1080x1350">Portrait post</option>
+                    <option value="1080x1920">Story</option>
+                    <option value="1920x640">Wide banner</option>
+                    <option value="custom">Custom</option>
+                  </select>
+                </label>
+                <label class="editor-control" for="canvas-width">
+                  <span>Page width <output id="canvas-width-output" for="canvas-width">1600px</output></span>
+                  <input id="canvas-width" type="range" min="600" max="2400" step="20" value="1600">
+                </label>
+                <label class="editor-control" for="canvas-height">
+                  <span>Page height <output id="canvas-height-output" for="canvas-height">1000px</output></span>
+                  <input id="canvas-height" type="range" min="400" max="2400" step="20" value="1000">
+                </label>
                 <label class="editor-control" for="font-size">
                   <span>Size <output id="size-output" for="font-size">88px</output></span>
-                  <input id="font-size" type="range" min="36" max="170" value="88">
+                  <input id="font-size" type="range" min="24" max="240" value="88">
                 </label>
                 <label class="editor-control" for="line-height">
                   <span>Line space <output id="line-height-output" for="line-height">1.15</output></span>
                   <input id="line-height" type="range" min="0.9" max="1.8" step="0.05" value="1.15">
                 </label>
+                <label class="editor-control" for="text-x">
+                  <span>Move X <output id="text-x-output" for="text-x">50%</output></span>
+                  <input id="text-x" type="range" min="0" max="100" value="50">
+                </label>
+                <label class="editor-control" for="text-y">
+                  <span>Move Y <output id="text-y-output" for="text-y">50%</output></span>
+                  <input id="text-y" type="range" min="0" max="100" value="50">
+                </label>
+                <label class="editor-control" for="text-width">
+                  <span>Text box <output id="text-width-output" for="text-width">100%</output></span>
+                  <input id="text-width" type="range" min="35" max="100" value="100">
+                </label>
+                <label class="editor-control" for="text-rotate">
+                  <span>Rotate <output id="text-rotate-output" for="text-rotate">0deg</output></span>
+                  <input id="text-rotate" type="range" min="-20" max="20" value="0">
+                </label>
                 <label class="editor-control" for="editor-padding">
                   <span>Padding <output id="padding-output" for="editor-padding">44px</output></span>
                   <input id="editor-padding" type="range" min="16" max="96" value="44">
                 </label>
+                <label class="editor-control" for="text-opacity">
+                  <span>Text opacity <output id="text-opacity-output" for="text-opacity">100%</output></span>
+                  <input id="text-opacity" type="range" min="0.15" max="1" step="0.05" value="1">
+                </label>
                 <label class="editor-control" for="image-opacity">
                   <span>Image opacity <output id="image-opacity-output" for="image-opacity">42%</output></span>
                   <input id="image-opacity" type="range" min="0" max="1" step="0.05" value="0.42">
+                </label>
+                <label class="editor-control select-control" for="image-fit">
+                  <span>Image fit</span>
+                  <select id="image-fit">
+                    <option value="cover">Cover</option>
+                    <option value="contain">Contain</option>
+                    <option value="stretch">Stretch</option>
+                  </select>
                 </label>
                 <label class="editor-control color-control" for="text-color">
                   <span>Text color</span>
@@ -156,9 +203,25 @@
                   <span>Background</span>
                   <input id="background-color" type="color" value="#fffaf0">
                 </label>
+                <label class="editor-control" for="outline-width">
+                  <span>Outline <output id="outline-width-output" for="outline-width">0px</output></span>
+                  <input id="outline-width" type="range" min="0" max="8" value="0">
+                </label>
+                <label class="editor-control color-control" for="outline-color">
+                  <span>Outline color</span>
+                  <input id="outline-color" type="color" value="#171717">
+                </label>
                 <label class="editor-control toggle-control" for="transparent-background">
                   <span>Transparent background</span>
                   <input id="transparent-background" type="checkbox">
+                </label>
+                <label class="editor-control toggle-control" for="text-shadow-toggle">
+                  <span>Text shadow</span>
+                  <input id="text-shadow-toggle" type="checkbox">
+                </label>
+                <label class="editor-control color-control" for="text-shadow-color">
+                  <span>Shadow color</span>
+                  <input id="text-shadow-color" type="color" value="#ffd93d">
                 </label>
               </div>
 
@@ -176,6 +239,7 @@
 
               <div class="editor-actions">
                 <button id="clear-image" type="button">Clear Picture</button>
+                <button id="reset-editor" type="button">Reset Design</button>
                 <button id="download-png" type="button">Download PNG</button>
                 <button id="download-txt" type="button">Download TXT</button>
               </div>
