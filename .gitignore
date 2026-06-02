@@ -6,4 +6,7 @@ __pycache__/
 .DS_Store
 *.log
 *.ttx
+fonts/webfont/*.woff
 build/
+stitch_ankibuki_font_specimen_website/
+agent.md
