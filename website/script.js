@@ -55,6 +55,15 @@
     }
   }
 
+  function copyInputText(){
+    const copyCss = document.getElementById("embed-code");
+    navigator.clipboard.writeText(copyCss.value).then(()=>{
+      alert("Copied to clipboard!");
+    }).catch(err=>{
+      console.error("Failed to copy: ", err);
+    });
+  }
+
   function updateThemeButton() {
     const isDark = document.documentElement.dataset.theme === "dark";
     themeToggles.forEach(function (button) {
